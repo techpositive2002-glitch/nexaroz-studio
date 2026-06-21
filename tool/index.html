@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexaroz Studio — Lead Gen Tool</title>
+  <title>Nexaroz — WhatsApp Lead Messenger</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,83 +14,54 @@
   <nav class="nav">
     <div class="container">
       <a href="../" class="nav-brand">◆ Nexaroz Studio</a>
-      <span class="nav-badge">Lead Gen Tool</span>
+      <span class="nav-badge">WhatsApp Messenger</span>
     </div>
   </nav>
 
   <div class="container">
     <div class="page-header">
-      <h1>AI Lead Generator</h1>
-      <p>Upload your Google Maps leads CSV — AI drafts personalized messages, send via WhatsApp or Email.</p>
+      <h1>Send WhatsApp Messages to Leads</h1>
+      <p>Upload CSV → Generate message → Click to send on WhatsApp</p>
     </div>
 
     <div class="setup-section" id="setupSection">
       <div class="card">
-        <h3>1. Add Gemini AI Key (Optional)</h3>
-        <p>Without a key, we'll use smart templates. <a href="https://aistudio.google.com/apikey" target="_blank">Get free key →</a></p>
-        <input type="password" id="apiKey" class="input" placeholder="Paste your Gemini API key here..." autocomplete="off">
-      </div>
-
-      <div class="card csv-card" id="csvDropZone">
-        <h3>2. Upload Your Leads</h3>
-        <p>CSV must have columns: <strong>Business Name</strong>, <strong>Phone</strong>, <strong>Person</strong></p>
+        <h3>1. Upload CSV</h3>
+        <p>Columns: <strong>Business Name</strong>, <strong>Phone</strong>, <strong>Person</strong></p>
         <div class="drop-zone" id="dropZone">
           <div class="drop-icon">📁</div>
-          <p>Drag & drop your CSV here or <strong>browse</strong></p>
-          <p class="drop-hint">CSV format: Business Name, Phone, Person Name</p>
+          <p>Drop CSV here or <strong>browse</strong></p>
           <input type="file" id="csvFile" accept=".csv" hidden>
         </div>
-        <div class="sample-csv">
-          <a href="#" id="downloadSample">Download sample CSV →</a>
-        </div>
+        <a href="#" id="downloadSample" class="sample-link">Download sample CSV →</a>
       </div>
 
       <div class="card">
-        <h3>3. Customize Your Pitch</h3>
-        <textarea id="pitchTemplate" class="textarea" rows="4">Hi {person}! This is Himanshu from Nexaroz Studio. I noticed {business} doesn't have a website yet. We build modern, mobile-friendly websites starting at just ₹5,000. Check out the kind of sites we create: https://studio.nexaroz.com — would you be open to a quick chat?</textarea>
+        <h3>2. Message Template</h3>
+        <p>Use <code>{person}</code>, <code>{business}</code> as placeholders</p>
+        <textarea id="pitchTemplate" class="textarea" rows="3">Hi {person}! Himanshu from Nexaroz Studio. I saw {business} could use a website. We build modern ones starting ₹5,000. See our work: studio.nexaroz.com — free to chat?</textarea>
       </div>
 
-      <button class="btn btn-primary" id="generateBtn">Generate Messages →</button>
+      <div class="card">
+        <h3>3. AI Enhancement (Optional)</h3>
+        <p><a href="https://aistudio.google.com/apikey" target="_blank">Get free Gemini key →</a> Makes messages more personalized per lead</p>
+        <input type="password" id="apiKey" class="input" placeholder="Paste Gemini API key..." autocomplete="off">
+      </div>
+
+      <button class="btn btn-primary" id="generateBtn">Generate & Show Messages →</button>
     </div>
 
     <div class="results-section hidden" id="resultsSection">
       <div class="results-header">
-        <div>
-          <h2>Your Leads (<span id="leadCount">0</span>)</h2>
-        </div>
-        <div class="results-actions">
-          <input type="text" id="searchInput" class="input search-input" placeholder="Search leads...">
-          <button class="btn btn-sm" id="exportBtn">Export CSV</button>
-        </div>
+        <h2>Leads — <span id="leadCount">0</span></h2>
+        <button class="btn btn-sm" id="refreshBtn">↻ Refresh</button>
       </div>
 
-      <div class="lead-filters">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="pending">Pending</button>
-        <button class="filter-btn" data-filter="sent">Sent</button>
-        <button class="filter-btn" data-filter="replied">Replied</button>
-      </div>
-
-      <div class="table-wrapper">
-        <table class="leads-table" id="leadsTable">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Business</th>
-              <th>Phone</th>
-              <th>Person</th>
-              <th>Message</th>
-              <th>Actions</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="leadsBody"></tbody>
-        </table>
-      </div>
+      <div id="leadsList"></div>
 
       <div id="loadingIndicator" class="hidden">
         <div class="spinner"></div>
-        <p>Generating messages with AI...</p>
+        <p>Generating with AI...</p>
       </div>
     </div>
   </div>
